@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="All Test Suite">
+    <test verbose="2" preserve-order="true" name="C:/Users/AnwarQ/IdeaProjects/FirstSeleniumTask">
+        <classes>
+            <class name="TestingAddressBookSuite.ChromeDriverInit">
+                <methods>
+                    <include name="ChromeDriverInitialize"/>
+                </methods>
+            </class>
+            <class name="TestingAddressBookSuite.MainPageTest">
+                <methods>
+                    <include name="testMainPageTitle"/>
+                    <include name="testMainPageHeaders"/>
+                    <include name="clickHomeButton"/>
+                    <include name="clickLoginButton"/>
+                </methods>
+            </class>
+            <class name="TestingAddressBookSuite.SignInPageTest">
+                <methods>
+                    <include name="testSignInPageTitle"/>
+                    <include name="testSignInPageElementsExist"/>
+                    <include name="testBadCredentialsInForm"/>
+                    <include name="clickSignUpButton"/>
+                    <include name="signIn"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>
