@@ -9,7 +9,7 @@ import org.testng.annotations.*;
 import java.util.concurrent.TimeUnit;
 
 public class MainPageTest extends ChromeDriverInit{
-
+    ChromeDriver driver;
 
     public MainPageTest() {
     }
@@ -23,9 +23,16 @@ public class MainPageTest extends ChromeDriverInit{
 
     @BeforeClass
     public void beforeClass(){
+        driver = new ChromeDriver(options);
+        driver.manage().timeouts().pageLoadTimeout(40, TimeUnit.SECONDS);
         driver.get("http://a.testaddressbook.com/");
         driver.manage().window().maximize();
     }
+
+  /* @AfterClass
+    public void afterClass(){
+        driver.close();
+    }*/
 
 
 

@@ -8,16 +8,15 @@ import java.util.concurrent.TimeUnit;
 
 public class ChromeDriverInit {
 
-    protected static ChromeDriver driver;
+    protected static ChromeOptions options;
 
 
     @BeforeSuite
     public void ChromeDriverInitialize(){
-        ChromeOptions options = new ChromeOptions();
+        options = new ChromeOptions();
         options.addArguments("--disable-popup-blocking");
         options.addArguments("--disable-notifications");
-        driver = new ChromeDriver(options);
-        driver.manage().timeouts().pageLoadTimeout(40, TimeUnit.SECONDS);
+
 
     }
 }
