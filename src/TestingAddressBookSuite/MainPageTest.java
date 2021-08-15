@@ -64,6 +64,8 @@ public class MainPageTest extends ChromeDriverInit{
         testMainPageTitle();
         testMainPageHeaders();
 
+        Assert.assertFalse(driver.findElements(By.xpath("//a[@data-test='home']//span[@class='sr-only']")).isEmpty());
+
 
     }
 
@@ -72,6 +74,8 @@ public class MainPageTest extends ChromeDriverInit{
         WebElement signInLink = driver.findElement(By.xpath("//a[@id='sign-in'][text()='Sign in']"));
         signInLink.click();
         String actualTitle = driver.getTitle();
-        Assert.assertEquals(actualTitle,"Address Book");
+        Assert.assertEquals(actualTitle,"Address Book - Sign In");
+
+        Assert.assertFalse(driver.findElements(By.xpath("//a[@data-test='sign-in']//span[@class='sr-only']")).isEmpty());
     }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="All Test Suite">
-    <test verbose="2" preserve-order="true" name="C:/Users/AnwarQ/IdeaProjects/FirstSeleniumTask">
+<suite name="All Test Suite" parallel="tests">
+    <test verbose="2" preserve-order="true" name="C:/Users/Alqarout/IdeaProjects/FirstSeleniumTask-FirstFunctionality" parallel="tests">
         <classes>
             <class name="TestingAddressBookSuite.ChromeDriverInit">
                 <methods>
@@ -23,6 +23,30 @@
                     <include name="testBadCredentialsInForm"/>
                     <include name="clickSignUpButton"/>
                     <include name="signIn"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <test verbose="2" preserve-order="true" name="C:/Users/Alqarout/IdeaProjects/FirstSeleniumTask-SecondFunctionality">
+        <classes>
+            <class name="TestingAddressBookSuite.AfterSignInTest">
+                <methods>
+                    <include name="validateMainContents"/>
+                    <include name="testAddressBtn"/>
+                    <include name="createEmptyAddress"/>
+                    <include name="createInvalidFirstNameAddress"/>
+                    <include name="createInvalidLastNameAddress"/>
+                    <include name="createInvalidZipCodeAddress"/>
+                    <include name="createInvalidAgeAddress"/>
+                    <include name="createInvalidBirthdayAddress"/>
+                    <include name="createValidAddress"/>
+                    <include name="editAddressCorrectlyAfterCreation"/>
+                    <include name="editAddressIncorrectlyAfterCreation"/>
+                    <include name="listAddressAfterCreation"/>
+                    <include name="listAddressBeforeCreation"/>
+                    <include name="destroyAddress"/>
+                    <include name="signOut"/>
                 </methods>
             </class>
         </classes>

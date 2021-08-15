@@ -19,9 +19,24 @@ public class AfterSignInTest extends ChromeDriverInit{
     private ChromeDriver driver;
     final private  String validUsername = "anwarTrue@gmail.com";
     final  private String validPassword = "root1234";
+
     final  private String invalidFirstName = "root1234";
     final private String invalidSecondName = "qarout232";
     final private String invalidZipCode = "12345sad";
+    final private String invalidAddress = "";
+    final private String invalidCity = "";
+
+    final  private String validFirstName = "anwar";
+    final private String validSecondName = "qarout";
+    final private String validZipCode = "12345";
+    final private String validAddress = "Ramallah";
+    final private String validCity = "Ramallah";
+
+    final private String URL = "http://a.testaddressbook.com/";
+    final private String addressURL = "http://a.testaddressbook.com/addresses";
+    final private String newAddressURL = "http://a.testaddressbook.com/addresses/new";
+
+
 
 
 
@@ -43,9 +58,9 @@ public class AfterSignInTest extends ChromeDriverInit{
 
     }
 
-    public void createValidAddressWithArgs(String name1, String name2){
+    public void createValidAddressWithArgs(String name1, String name2,String addr, String City, String zip){
         //System.out.println(flag);
-        driver.get("http://a.testaddressbook.com/addresses/new");
+        driver.get(newAddressURL);
         WebElement firstName = driver.findElement(By.xpath("//input[@id=\"address_first_name\"]"));
         firstName.click();
         firstName.sendKeys(name1);
@@ -56,22 +71,22 @@ public class AfterSignInTest extends ChromeDriverInit{
 
         WebElement address1 = driver.findElement(By.xpath("//input[@id=\"address_street_address\"]"));
         address1.click();
-        address1.sendKeys("whatever");
+        address1.sendKeys(addr);
 
         WebElement city = driver.findElement(By.xpath("//input[@id='address_city']"));
         city.click();
-        city.sendKeys("whatever");
+        city.sendKeys(City);
 
         WebElement zipCode = driver.findElement(By.xpath("//input[@id=\"address_zip_code\"]"));
         zipCode.click();
-        zipCode.sendKeys("12345");
+        zipCode.sendKeys(zip);
 
 
-        WebElement submitBtn = driver.findElement(By.xpath("//input[@type='submit']"));
+      /*  WebElement submitBtn = driver.findElement(By.xpath("//input[@type='submit']"));
         submitBtn.click();
 
-        Assert.assertNotEquals(driver.getCurrentUrl(),"http://a.testaddressbook.com/addresses/new"); //new
-        Assert.assertFalse(driver.findElements(By.xpath("//div[contains(@class,'alert')][text()='Address was successfully created.']")).isEmpty());
+        Assert.assertNotEquals(driver.getCurrentUrl(),newAddressURL); //new
+        Assert.assertFalse(driver.findElements(By.xpath("//div[contains(@class,'alert')][text()='Address was successfully created.']")).isEmpty());*/
     }
 
     @BeforeClass
@@ -88,9 +103,11 @@ public class AfterSignInTest extends ChromeDriverInit{
         driver.close();
     }
 
+
+
     @BeforeMethod
     public void beforeMethod(){
-        driver.get("http://a.testaddressbook.com/");
+        driver.get(URL);
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(3,TimeUnit.SECONDS);
     }
@@ -98,7 +115,10 @@ public class AfterSignInTest extends ChromeDriverInit{
     @Test
     public void validateMainContents(){
 
-        Assert.assertEquals(driver.getCurrentUrl(),"http://a.testaddressbook.com/");
+        //a[@data-test='home']//span[@class='sr-only']
+        Assert.assertFalse(driver.findElements(By.xpath("//a[@data-test='home']//span[@class='sr-only']")).isEmpty());
+
+        Assert.assertEquals(driver.getCurrentUrl(),URL);
         WebElement mainHeader = driver.findElement(By.xpath("//div[@class='text-center']//child::h1"));
 
         String expectedMainHeader = "Welcome to Address Book";
@@ -113,7 +133,8 @@ public class AfterSignInTest extends ChromeDriverInit{
 
         WebElement addressBtn = driver.findElement(By.xpath("//a[text()='Addresses']"));
         addressBtn.click();
-        Assert.assertEquals(driver.getCurrentUrl(),"http://a.testaddressbook.com/addresses");
+        Assert.assertEquals(driver.getCurrentUrl(),addressURL);
+        Assert.assertFalse(driver.findElements(By.xpath("//a[@data-test='addresses']//span[@class='sr-only']")).isEmpty());
 
         //Assert.assertFalse(driver.findElements(By.xpath("//span[@class='navbar-text'][text()='"+this.validUsername+"']")).isEmpty());
 
@@ -121,137 +142,59 @@ public class AfterSignInTest extends ChromeDriverInit{
 
     @Test
     public void testAddressBtn(){
-        driver.get("http://a.testaddressbook.com/addresses");
+        driver.get(addressURL);
         WebElement newAddress = driver.findElement(By.xpath("//a[contains(@class,'row')][@data-test='create']"));
         newAddress.click();
-        Assert.assertEquals(driver.getCurrentUrl(),"http://a.testaddressbook.com/addresses/new");
+        Assert.assertEquals(driver.getCurrentUrl(),newAddressURL);
     }
 
     @Test
     public void createEmptyAddress(){
-        driver.get("http://a.testaddressbook.com/addresses/new");
+        driver.get(newAddressURL);
         WebElement submitBtn = driver.findElement(By.xpath("//input[@type='submit']"));
         submitBtn.click();
         Assert.assertFalse(driver.findElements(By.xpath("//ul")).isEmpty());
-        Assert.assertEquals(driver.getCurrentUrl(),"http://a.testaddressbook.com/addresses/new"); //new
+        Assert.assertEquals(driver.getCurrentUrl(),newAddressURL); //new
     }
 
     @Test
     public void createInvalidFirstNameAddress(){
-        driver.get("http://a.testaddressbook.com/addresses/new");
-        WebElement firstName = driver.findElement(By.xpath("//input[@id=\"address_first_name\"]"));
-        firstName.click();
-        firstName.sendKeys(invalidFirstName);
-
-        WebElement lastName = driver.findElement(By.xpath("//input[@id=\"address_last_name\"]"));
-        lastName.click();
-        lastName.sendKeys("whatever");
-
-        WebElement address1 = driver.findElement(By.xpath("//input[@id=\"address_street_address\"]"));
-        address1.click();
-        address1.sendKeys("whatever");
-
-        WebElement city = driver.findElement(By.xpath("//input[@id='address_city']"));
-        city.click();
-        city.sendKeys("whatever");
-
-        WebElement zipCode = driver.findElement(By.xpath("//input[@id=\"address_zip_code\"]"));
-        zipCode.click();
-        zipCode.sendKeys("12345");
+        createValidAddressWithArgs(invalidFirstName,validSecondName,validAddress,validCity,validZipCode);
 
         WebElement submitBtn = driver.findElement(By.xpath("//input[@type='submit']"));
         submitBtn.click();
 
         Assert.assertFalse(driver.findElements(By.xpath("//ul")).isEmpty());
-        Assert.assertEquals(driver.getCurrentUrl(),"http://a.testaddressbook.com/addresses/new"); //new
+        Assert.assertEquals(driver.getCurrentUrl(),newAddressURL); //new
     }
 
     @Test
     public void createInvalidLastNameAddress(){
-        driver.get("http://a.testaddressbook.com/addresses/new");
-        WebElement firstName = driver.findElement(By.xpath("//input[@id=\"address_first_name\"]"));
-        firstName.click();
-        firstName.sendKeys("whatever");
-
-        WebElement lastName = driver.findElement(By.xpath("//input[@id=\"address_last_name\"]"));
-        lastName.click();
-        lastName.sendKeys(invalidSecondName);
-
-        WebElement address1 = driver.findElement(By.xpath("//input[@id=\"address_street_address\"]"));
-        address1.click();
-        address1.sendKeys("whatever");
-
-        WebElement city = driver.findElement(By.xpath("//input[@id='address_city']"));
-        city.click();
-        city.sendKeys("whatever");
-
-        WebElement zipCode = driver.findElement(By.xpath("//input[@id=\"address_zip_code\"]"));
-        zipCode.click();
-        zipCode.sendKeys("12345");
+        createValidAddressWithArgs(validFirstName,invalidSecondName,validAddress,validCity,validZipCode);
 
         WebElement submitBtn = driver.findElement(By.xpath("//input[@type='submit']"));
         submitBtn.click();
 
         Assert.assertFalse(driver.findElements(By.xpath("//ul")).isEmpty());
-        Assert.assertEquals(driver.getCurrentUrl(),"http://a.testaddressbook.com/addresses/new"); //new
+        Assert.assertEquals(driver.getCurrentUrl(),newAddressURL); //new
 
     }
 
     @Test
     public void createInvalidZipCodeAddress(){
-        driver.get("http://a.testaddressbook.com/addresses/new");
-        WebElement firstName = driver.findElement(By.xpath("//input[@id=\"address_first_name\"]"));
-        firstName.click();
-        firstName.sendKeys("whatever");
-
-        WebElement lastName = driver.findElement(By.xpath("//input[@id=\"address_last_name\"]"));
-        lastName.click();
-        lastName.sendKeys("whatever");
-
-        WebElement address1 = driver.findElement(By.xpath("//input[@id=\"address_street_address\"]"));
-        address1.click();
-        address1.sendKeys("whatever");
-
-        WebElement city = driver.findElement(By.xpath("//input[@id='address_city']"));
-        city.click();
-        city.sendKeys("whatever");
-
-        WebElement zipCode = driver.findElement(By.xpath("//input[@id=\"address_zip_code\"]"));
-        zipCode.click();
-        zipCode.sendKeys(invalidZipCode);
+        createValidAddressWithArgs(validFirstName,validSecondName,validAddress,validCity,invalidZipCode);
 
         WebElement submitBtn = driver.findElement(By.xpath("//input[@type='submit']"));
         submitBtn.click();
 
         Assert.assertFalse(driver.findElements(By.xpath("//ul")).isEmpty());
-        Assert.assertEquals(driver.getCurrentUrl(),"http://a.testaddressbook.com/addresses/new"); //new
+        Assert.assertEquals(driver.getCurrentUrl(),newAddressURL); //new
 
     }
 
     @Test
     public void createInvalidAgeAddress(){
-        driver.get("http://a.testaddressbook.com/addresses/new");
-        WebElement firstName = driver.findElement(By.xpath("//input[@id=\"address_first_name\"]"));
-        firstName.click();
-        firstName.sendKeys("whatever");
 
-        WebElement lastName = driver.findElement(By.xpath("//input[@id=\"address_last_name\"]"));
-        lastName.click();
-        lastName.sendKeys("whatever");
-
-        WebElement address1 = driver.findElement(By.xpath("//input[@id=\"address_street_address\"]"));
-        address1.click();
-        address1.sendKeys("whatever");
-
-        WebElement city = driver.findElement(By.xpath("//input[@id='address_city']"));
-        city.click();
-        city.sendKeys("whatever");
-
-        WebElement zipCode = driver.findElement(By.xpath("//input[@id=\"address_zip_code\"]"));
-        zipCode.click();
-        zipCode.sendKeys("12345");
-
-        WebElement age = driver.findElement(By.xpath("//input[@id='address_age']"));
         int randChoice = ThreadLocalRandom.current().nextInt(0, 1 + 1);
         int randomNum;
         if(randChoice ==0) {
@@ -261,6 +204,8 @@ public class AfterSignInTest extends ChromeDriverInit{
             randomNum = ThreadLocalRandom.current().nextInt(120, 1000 + 1);
         }
 
+        createValidAddressWithArgs(validFirstName,validSecondName,validAddress,validCity,validZipCode);
+        WebElement age = driver.findElement(By.xpath("//input[@id='address_age']"));
         age.click();
         age.sendKeys(Integer.toString(randomNum));
 
@@ -268,34 +213,13 @@ public class AfterSignInTest extends ChromeDriverInit{
         submitBtn.click();
 
         Assert.assertFalse(driver.findElements(By.xpath("//ul")).isEmpty());
-        Assert.assertEquals(driver.getCurrentUrl(),"http://a.testaddressbook.com/addresses/new"); //new
-
-
+        Assert.assertEquals(driver.getCurrentUrl(),newAddressURL); //new
 
     }
 
     @Test
     public void createInvalidBirthdayAddress(){
-        driver.get("http://a.testaddressbook.com/addresses/new");
-        WebElement firstName = driver.findElement(By.xpath("//input[@id=\"address_first_name\"]"));
-        firstName.click();
-        firstName.sendKeys("whatever");
 
-        WebElement lastName = driver.findElement(By.xpath("//input[@id=\"address_last_name\"]"));
-        lastName.click();
-        lastName.sendKeys("whatever");
-
-        WebElement address1 = driver.findElement(By.xpath("//input[@id=\"address_street_address\"]"));
-        address1.click();
-        address1.sendKeys("whatever");
-
-        WebElement city = driver.findElement(By.xpath("//input[@id='address_city']"));
-        city.click();
-        city.sendKeys("whatever");
-
-        WebElement zipCode = driver.findElement(By.xpath("//input[@id=\"address_zip_code\"]"));
-        zipCode.click();
-        zipCode.sendKeys("12345");
 
         /* Select Random Date */
         LocalDate date;
@@ -309,8 +233,11 @@ public class AfterSignInTest extends ChromeDriverInit{
             date = LocalDate.of((int) ThreadLocalRandom.current().nextInt(2021, 3000 + 1), (int) ThreadLocalRandom.current().nextInt(1, 12 + 1), (int) ThreadLocalRandom.current().nextInt(1, 31 + 1));
         }
 
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM dd yyyy");
         date.format(formatter);
+
+        createValidAddressWithArgs(validFirstName,validSecondName,validAddress,validCity,validZipCode);
 
         WebElement birthday = driver.findElement(By.xpath("//input[@type='date']"));
         birthday.sendKeys(date.toString());
@@ -319,38 +246,18 @@ public class AfterSignInTest extends ChromeDriverInit{
         submitBtn.click();
 
         Assert.assertFalse(driver.findElements(By.xpath("//ul")).isEmpty());
-        Assert.assertEquals(driver.getCurrentUrl(),"http://a.testaddressbook.com/addresses/new"); //new
+        Assert.assertEquals(driver.getCurrentUrl(),newAddressURL); //new
 
     }
 
     @Test
     public void createValidAddress(){
-        driver.get("http://a.testaddressbook.com/addresses/new");
-        WebElement firstName = driver.findElement(By.xpath("//input[@id=\"address_first_name\"]"));
-        firstName.click();
-        firstName.sendKeys("whatever");
-
-        WebElement lastName = driver.findElement(By.xpath("//input[@id=\"address_last_name\"]"));
-        lastName.click();
-        lastName.sendKeys("whatever");
-
-        WebElement address1 = driver.findElement(By.xpath("//input[@id=\"address_street_address\"]"));
-        address1.click();
-        address1.sendKeys("whatever");
-
-        WebElement city = driver.findElement(By.xpath("//input[@id='address_city']"));
-        city.click();
-        city.sendKeys("whatever");
-
-        WebElement zipCode = driver.findElement(By.xpath("//input[@id=\"address_zip_code\"]"));
-        zipCode.click();
-        zipCode.sendKeys("12345");
-
+        createValidAddressWithArgs(validFirstName,validSecondName,validAddress,validCity,validZipCode);
 
         WebElement submitBtn = driver.findElement(By.xpath("//input[@type='submit']"));
         submitBtn.click();
 
-        Assert.assertNotEquals(driver.getCurrentUrl(),"http://a.testaddressbook.com/addresses/new"); //new
+        Assert.assertNotEquals(driver.getCurrentUrl(),newAddressURL); //new
         Assert.assertFalse(driver.findElements(By.xpath("//div[contains(@class,'alert')][text()='Address was successfully created.']")).isEmpty());
     }
 
@@ -395,43 +302,54 @@ public class AfterSignInTest extends ChromeDriverInit{
 
     @Test
     public void listAddressAfterCreation(){
-        createValidAddressWithArgs("ABD","ABD");
+        createValidAddressWithArgs(validFirstName,validSecondName,validAddress,validCity,validZipCode);
+        WebElement submitBtn = driver.findElement(By.xpath("//input[@type='submit']"));
+        submitBtn.click();
+
         WebElement list = driver.findElement(By.xpath("//a[@data-test='list'][text()='List']"));
         list.click();
-        Assert.assertEquals(driver.getCurrentUrl(),"http://a.testaddressbook.com/addresses");
-        Assert.assertFalse(driver.findElements(By.xpath("//tr//td[text()='ABD']")).isEmpty());
+
+        Assert.assertEquals(driver.getCurrentUrl(),addressURL);
+        Assert.assertFalse(driver.findElements(By.xpath("//tr//td[text()='"+validFirstName+"']")).isEmpty());
     }
 
     @Test
     public void listAddressBeforeCreation(){
-        driver.get("http://a.testaddressbook.com/addresses/new");
-        WebElement firstName = driver.findElement(By.xpath("//input[@id=\"address_first_name\"]"));
-        firstName.click();
-        firstName.sendKeys("hello");
-
-        WebElement lastName = driver.findElement(By.xpath("//input[@id=\"address_last_name\"]"));
-        lastName.click();
-        lastName.sendKeys("whatever");
-
-        WebElement address1 = driver.findElement(By.xpath("//input[@id=\"address_street_address\"]"));
-        address1.click();
-        address1.sendKeys("whatever");
-
-        WebElement city = driver.findElement(By.xpath("//input[@id='address_city']"));
-        city.click();
-        city.sendKeys("whatever");
-
-        WebElement zipCode = driver.findElement(By.xpath("//input[@id=\"address_zip_code\"]"));
-        zipCode.click();
-        zipCode.sendKeys("12345");
+        createValidAddressWithArgs(validFirstName,validSecondName,validAddress,validCity,validZipCode);
 
         WebElement submitBtn = driver.findElement(By.xpath("//a[@data-test='list'][text()='List']"));
         submitBtn.click();
 
-        Assert.assertFalse(driver.findElements(By.xpath("//ul")).isEmpty());
-        Assert.assertEquals(driver.getCurrentUrl(),"http://a.testaddressbook.com/addresses");
-        Assert.assertFalse(driver.findElements(By.xpath("//tr//td[text()='hello']")).isEmpty());
+        Assert.assertEquals(driver.getCurrentUrl(),addressURL);
+        Assert.assertFalse(driver.findElements(By.xpath("//tr//td[text()='"+validFirstName+"']")).isEmpty());
     }
+
+
+
+    @Test
+    public void destroyAddress(){
+        driver.get(addressURL);
+        WebElement firstNameOfFirstAddress = driver.findElement(By.xpath("//table//tbody//tr//td"));
+        String text = firstNameOfFirstAddress.getText();
+
+        WebElement destroy = driver.findElement(By.xpath("//table//tbody//tr//td//a[@data-method='delete']"));
+        destroy.click();
+
+        driver.switchTo().alert().accept();
+        //driver.get(addressURL);
+
+       // firstNameOfFirstAddress = driver.findElement(By.xpath("//table//tbody//tr//td[text()='"+text+"'"));
+       // Assert.assertTrue(driver.findElements(By.xpath("//table//tbody//tr//td[text()='"+text+"'")).isEmpty());
+    }
+
+    @Test
+    public void signOut(){
+        WebElement signOutLink = driver.findElement(By.xpath("//a[text()='Sign out']"));
+        signOutLink.click();
+        Assert.assertEquals(driver.getCurrentUrl(),"http://a.testaddressbook.com/sign_in");
+    }
+
+
 
 
 
@@ -498,12 +416,7 @@ public class AfterSignInTest extends ChromeDriverInit{
 
 
 
-    /*@Test
-    public void signOut(){
-        WebElement signOutLink = driver.findElement(By.xpath("//a[text()='Sign out']"));
-        signOutLink.click();
-        Assert.assertEquals(driver.getCurrentUrl(),"http://a.testaddressbook.com/sign_in");
-    }*/
+
 
 
 

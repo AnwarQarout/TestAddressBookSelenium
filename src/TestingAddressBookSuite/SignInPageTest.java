@@ -15,6 +15,7 @@ public class SignInPageTest extends ChromeDriverInit {
     final private static String invalidEmail = "badusername";
     final private  String validUsername = "anwarTrue@gmail.com";
     final  private String validPassword = "root1234";
+    final private String URL = "http://a.testaddressbook.com/sign_in";
      private ChromeDriver driver;
 
     public SignInPageTest(){
@@ -31,7 +32,7 @@ public class SignInPageTest extends ChromeDriverInit {
 
     @BeforeMethod
     public void beforeMethod(){
-        driver.get("http://a.testaddressbook.com/sign_in");
+        driver.get(URL);
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(3,TimeUnit.SECONDS);
 
@@ -78,7 +79,7 @@ public class SignInPageTest extends ChromeDriverInit {
         Assert.assertFalse(driver.findElements(By.xpath("//div[contains(@class,'alert')][text()='Bad email or password.']")).isEmpty());
 
         //only enter password
-        driver.get("http://a.testaddressbook.com/sign_in");
+        driver.get(URL);
 
         WebElement passwordField = driver.findElement(By.xpath("//input[@placeholder='Password'][@type='password']"));
         passwordField.sendKeys(badPassword);
@@ -89,7 +90,7 @@ public class SignInPageTest extends ChromeDriverInit {
         Assert.assertFalse(driver.findElements(By.xpath("//div[contains(@class,'alert')][text()='Bad email or password.']")).isEmpty());
 
         //enter invalid username and password
-        driver.get("http://a.testaddressbook.com/sign_in");
+        driver.get(URL);
 
         WebElement usernameField = driver.findElement(By.xpath("//input[@type='email'][@placeholder='Email']"));
         usernameField.sendKeys(badUsername);
@@ -103,7 +104,7 @@ public class SignInPageTest extends ChromeDriverInit {
         Assert.assertFalse(driver.findElements(By.xpath("//div[contains(@class,'alert')][text()='Bad email or password.']")).isEmpty());
 
         // Only enter username
-        driver.get("http://a.testaddressbook.com/sign_in");
+        driver.get(URL);
         usernameField = driver.findElement(By.xpath("//input[@type='email'][@placeholder='Email']"));
         usernameField.sendKeys(badUsername);
 
@@ -113,14 +114,14 @@ public class SignInPageTest extends ChromeDriverInit {
         Assert.assertFalse(driver.findElements(By.xpath("//div[contains(@class,'alert')][text()='Bad email or password.']")).isEmpty());
 
         // enter invalid username with no @ in it
-        driver.get("http://a.testaddressbook.com/sign_in");
+        driver.get(URL);
         usernameField = driver.findElement(By.xpath("//input[@type='email'][@placeholder='Email']"));
         usernameField.sendKeys(invalidEmail);
 
         submitBtn = driver.findElement(By.xpath("//input[@type='submit'][@value='Sign in']"));
         submitBtn.click();
 
-        Assert.assertEquals("http://a.testaddressbook.com/sign_in",driver.getCurrentUrl());
+        Assert.assertEquals(URL,driver.getCurrentUrl());
 
     }
 
